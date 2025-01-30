@@ -61,4 +61,12 @@ export class UsersService {
 
     return user;
   }
+
+  async remove(id: number) {
+    const user: User = await this.findOne(id);
+
+    if (!user) throw new HttpException("User doesn't exists", 404);
+
+    return this.userRepository.remove(user);
+  }
 }
