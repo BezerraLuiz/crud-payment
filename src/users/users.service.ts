@@ -62,7 +62,7 @@ export class UsersService {
     return user;
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<User> {
     const user: User = await this.findOne(id);
 
     if (!user) throw new HttpException("User doesn't exists", 404);
