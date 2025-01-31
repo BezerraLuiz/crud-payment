@@ -1,6 +1,7 @@
 import {
   IsEmail,
   IsNotEmpty,
+  IsPositive,
   IsString,
   IsStrongPassword,
 } from 'class-validator';
@@ -8,12 +9,12 @@ import {
 export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
-  name: string;
+  readonly name: string;
 
   @IsString()
   @IsEmail()
   @IsNotEmpty()
-  mail: string;
+  readonly mail: string;
 
   @IsString()
   @IsNotEmpty()
@@ -24,5 +25,9 @@ export class CreateUserDto {
     minNumbers: 1,
     minSymbols: 1,
   })
-  password: string;
+  readonly password: string;
+
+  @IsNotEmpty()
+  @IsPositive()
+  readonly roleId: number;
 }
