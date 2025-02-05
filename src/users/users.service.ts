@@ -7,6 +7,7 @@ import { UpdateUserDto } from './dtos/update-user.dto';
 import { RolesService } from 'src/roles/roles.service';
 import { CreateUserInterface } from './interfaces/create-user.interface';
 import { UpdateUserInterface } from './interfaces/update-user.interface';
+import { HashingPassword } from 'src/utils/hashing';
 
 @Injectable()
 export class UsersService {
@@ -51,12 +52,22 @@ export class UsersService {
       throw new HttpException('User already exists', HttpStatus.CONFLICT);
     }
 
+    // Hashing password
+    const passwordHash: string = await HashingPassword(body.password);
+
+    if (!passwordHash) {
+      throw new HttpException(
+        'Error hashing password',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+
     // Create user
     const user: User = this.userRepository.create({
       name: body.name,
       mail: body.mail,
       role,
-      passwordHash: body.password,
+      passwordHash,
     });
 
     await this.userRepository.save(user);
